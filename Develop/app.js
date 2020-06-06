@@ -75,7 +75,7 @@ function runInquirerManager() {
 function runInquirerEngineer() {
     const promptArray = [{
         type: "input",
-        message: "What is your github?",
+        message: "Your github Please?",
         name: "github"
     }];
 
@@ -86,7 +86,7 @@ function runInquirerEngineer() {
 function runInquirerIntern() {
     const promptArray = [{
         type: "input",
-        message: "What school do you attend?",
+        message: "What University do you attend?",
         name: "school"
     }];
 
@@ -175,7 +175,9 @@ function getCardHtml() {
 
 
 
-let html = `< !DOCTYPE html >
+let html = 
+
+`< !DOCTYPE html >
             <html lang="en">
                 <head>
                     <meta charset="UTF-8">
@@ -196,14 +198,14 @@ let html = `< !DOCTYPE html >
                                             padding: 15px;
             border-radius: 6px;
             background-color: white;
-            color: lightskyblue;
+            color: blue;
             margin: 15px;
         }
         .text {
                                             padding: 15px;
             border-radius: 6px;
-            background-color: lightskyblue;
-            color: black;
+            background-color: blue;
+            color: red;
             margin: 15px;
         }
         .col {
@@ -231,7 +233,7 @@ let html = `< !DOCTYPE html >
 
 console.log(html);
 const fs = require("fs");
-fs.writeFile('newfile.html', html, function (err) {
+fs.writeFile('team.html', html, function (err) {
     if (err) throw err;
     console.log('File is created successfully.');
 });
