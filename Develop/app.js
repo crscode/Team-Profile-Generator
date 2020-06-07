@@ -1,60 +1,31 @@
-const Manager = require("./lib/Manager");
+const inquirer = require("inquirer");
+
+const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const inquirer = require("inquirer");
-const path = require("path");
+const Manager = require("./lib/Manager");
+
 const fs = require("fs");
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
-
-const render = require("./lib/htmlRenderer");
-
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
 
 function runInquirer() {
     const promptArray = [{
         type: "input",
-        message: "What is your name?",
-        name: "name"
-    }, 
-    {
+        message: "What is your Full Name?",
+        name: "Name"
+    }, {
         type: "input",
         message: "What is your ID?",
-        name: "id"
-    }, 
-    {
+        name: "Id"
+    }, {
         type: "input",
-        message: "What is your email?",
-        name: "email"
-    }, 
-    {
+        message: "What is your Email?",
+        name: "Email"
+    }, {
         type: "list",
-        message: "What is your title",
+        message: "What is your Title",
         choices: ["Manager", "Engineer", "Intern"],
-        name: "title"
+        name: "Title"
     }];
 
     return inquirer
@@ -64,8 +35,8 @@ function runInquirer() {
 function runInquirerManager() {
     const promptArray = [{
         type: "input",
-        message: "What is your office number?",
-        name: "officeNumber"
+        message: "What is your Office Number?",
+        name: "Main Number"
     }];
 
     return inquirer
@@ -75,7 +46,7 @@ function runInquirerManager() {
 function runInquirerEngineer() {
     const promptArray = [{
         type: "input",
-        message: "Your github Please?",
+        message: "What is your github?",
         name: "github"
     }];
 
@@ -86,16 +57,18 @@ function runInquirerEngineer() {
 function runInquirerIntern() {
     const promptArray = [{
         type: "input",
-        message: "What University do you attend?",
+        message: "What school do you attend?",
         name: "school"
     }];
 
     return inquirer
         .prompt(promptArray);
 }
+
+
 async function run() {
     let employeeArray = [];
-    const maxTimes = 4;
+    const maxTimes = 6;
     for (i = 0; i < maxTimes; i++) {
         const promise = new Promise((resolve, reject) => {
             runInquirer()
@@ -135,107 +108,105 @@ async function run() {
         console.log(result);
     }
 
-// console.log(employeeArray.length);
+    // console.log(employeeArray.length);
 
-function displayTitle(employee) {
-    if (employee.title === "Manager") {
-        console.log(employee.officeNumber);
-        return `office number: ${employee.officeNumber}`;
+    function displayTitle(employee) {
+        if (employee.title === "Manager") {
+            console.log(employee.officeNumber);
+            return `office number: ${employee.officeNumber}`;
+        }
+
+        if (employee.title === "Intern") {
+            return `school: ${employee.school}`;
+        }
+
+        if (employee.title === "Engineer") {
+            return `gitHub: ${employee.github}`;
+        }
+
+    }
+    function getCardHtml() {
+        let html = "";
+        for (j = 0; j < maxTimes; j++) {
+            console.log(employeeArray[j])
+            html += `<div class="card bg-dark justify-content-center align-items-center" style="width: 18rem;">
+                <div class="col card-header">
+                    <h4>${employeeArray[j].name}</h4>
+                </div>
+                <div class="col card-header">
+                    <h4>${employeeArray[j].title}</h4 >
+                </div >
+                <ul class="list-group list-group-flush text">
+                    <li class="list-group-item">ID: ${employeeArray[j].id}</li>
+                    <li class="list-group-item">Email: ${employeeArray[j].email}</li>
+                    <li class="list-group-item"> ${displayTitle(employeeArray[j])}</li>
+                </ul>
+            </div > `;
+        }
+        return html;
     }
 
-    if (employee.title === "Intern") {
-        return `school: ${employee.school}`;
-    }
-
-    if (employee.title === "Engineer") {
-        return `gitHub: ${employee.github}`;
-    }
-
-}
-function getCardHtml() {
-    let html = "";
-    for (j = 0; j < maxTimes; j++) {
-        console.log(employeeArray[j])
-        html += `<div class="card bg-dark justify-content-center align-items-center" style="width: 18rem;">
-            <div class="col card-header">
-                <h4>${employeeArray[j].name}</h4>
-            </div>
-            <div class="col card-header">
-                <h4>${employeeArray[j].title}</h4 >
-            </div >
-            <ul class="list-group list-group-flush text">
-                <li class="list-group-item">ID: ${employeeArray[j].id}</li>
-                <li class="list-group-item">Email: ${employeeArray[j].email}</li>
-                <li class="list-group-item"> ${displayTitle(employeeArray[j])}</li>
-            </ul>
-        </div > `;
-    }
-    return html;
-}
 
 
-
-let html = 
-
-`< !DOCTYPE html >
-            <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-                                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-                                    <title>Document</title>
-                                    <style>
-                                        .row {
-                                            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .card {
-                                            padding: 15px;
-            border-radius: 6px;
-            background-color: white;
-            color: blue;
-            margin: 15px;
-        }
-        .text {
-                                            padding: 15px;
-            border-radius: 6px;
-            background-color: blue;
-            color: red;
-            margin: 15px;
-        }
-        .col {
-                                            flex: 1;
-            text-align: center;
-        }
-    </style>
-</head>
-                                <body>
-                                    <nav class="navbar navbar-dark bg-dark justify-content-center align-items-center">
-                                        <span class="navbar-brand mb-0 h1">
-                                            <h1>My Team</h1>
-                                        </span>
-                                    </nav>
-                                    <div class="row">
-                                        ${getCardHtml()}
-                                    </div>
-                                </body>
-
-</html>
-`;
+    let html = `< !DOCTYPE html >
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                                        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+                                        <title>Document</title>
+                                        <style>
+                                            .row {
+                                                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            .card {
+                                                padding: 15px;
+                border-radius: 6px;
+                background-color: white;
+                color: lightskyblue;
+                margin: 15px;
+            }
+            .text {
+                                                padding: 15px;
+                border-radius: 6px;
+                background-color: lightskyblue;
+                color: black;
+                margin: 15px;
+            }
+            .col {
+                                                flex: 1;
+                text-align: center;
+            }
+        </style>
+    </head>
+                                    <body>
+                                        <nav class="navbar navbar-dark bg-dark justify-content-center align-items-center">
+                                            <span class="navbar-brand mb-0 h1">
+                                                <h1>My Team</h1>
+                                            </span>
+                                        </nav>
+                                        <div class="row">
+                                            ${getCardHtml()}
+                                        </div>
+                                    </body>
+    
+    </html>
+    `;
 
 
 
 
-console.log(html);
-const fs = require("fs");
-fs.writeFile('team.html', html, function (err) {
-    if (err) throw err;
-    console.log('File is created successfully.');
-});
+    console.log(html);
+    const fs = require("fs");
+    fs.writeFile('team.html', html, function (err) {
+        if (err) throw err;
+        console.log('File is created successfully.');
+    });
 }
 run()
